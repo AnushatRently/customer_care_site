@@ -28,7 +28,7 @@ io.on('connection', socket => {
   });
   socket.on("event-1", message => {
     socket.broadcast.emit('display_event-1', {message: message.message, name: message.user})
-    console.log('Broadcasted')
+    console.log(message.message)
   });
 
   socket.on("event-2", message => {

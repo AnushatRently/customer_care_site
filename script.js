@@ -53,7 +53,7 @@ sendButton.addEventListener('click', e => {
   e.preventDefault()
   board = document.getElementById('content_display_id')
   message = document.getElementById('content_box_id')
-  content = botMessage(message.value)
+  content = botMessage({text: message.value}, 'agent')
   board.append(content)
   socket.emit('event-2', message.value)
   message.value = ''
@@ -73,7 +73,7 @@ sendButton.addEventListener('click', e => {
 //   messageContainer.append(messageElement)
 // }
 
-function botMessage(message) {
+function userMessage(message) {
   new_row = document.createElement('div');
   new_row.className = "chat__conversation-board__message-container";
   new_row2 = document.createElement('div');
@@ -81,7 +81,7 @@ function botMessage(message) {
   new_row3 = document.createElement('div');
   new_row3.className = "chat__conversation-board__message__person__avatar";
   img = document.createElement("img");
-  img.src = "https://randomuser.me/api/portraits/women/44.jpg";
+  img.src = "./customer.png";
   new_row3.appendChild(img)
   new_row4 = document.createElement('div');
   new_row4.className = "chat__conversation-board__message__context";
@@ -98,7 +98,7 @@ function botMessage(message) {
   return new_row
 }
 
-function userMessage(message) {
+function botMessage(message, from) {
   new_row = document.createElement('div');
   new_row.className = "chat__conversation-board__message-container reversed";
   new_row2 = document.createElement('div');
@@ -106,15 +106,31 @@ function userMessage(message) {
   new_row3 = document.createElement('div');
   new_row3.className = "chat__conversation-board__message__person__avatar";
   img = document.createElement("img");
-  img.src = "https://randomuser.me/api/portraits/men/9.jpg";
+  if (from==='bot') {
+    img.src = "./bot.png";
+  } else {
+    img.src = "./agent.png";
+  }
   new_row3.appendChild(img)
   new_row4 = document.createElement('div');
   new_row4.className = "chat__conversation-board__message__context";
   content =  document.createElement('div');
   content.className = "chat__conversation-board__message__bubble";
   span_tag = document.createElement("SPAN");
-  content1 = document.createTextNode(message);
+  content1 = document.createTextNode(message.text);
   span_tag.appendChild(content1)
+  if(message.quick_replies) {
+    list = message.quick_replies
+    list.forEach(element => {
+      sub_content =  document.createElement('div');
+      sub_content.className = "chat__conversation-board__message__bubble__2";
+      //sub_span_tag = document.createElement("SPAN");
+      sub_content1 = document.createTextNode(`>>> ${element.title}`);
+      //sub_span_tag.appendChild(sub_content1)
+      sub_content.appendChild(sub_content1)
+      span_tag.appendChild(sub_content)
+    });
+  }
   content.appendChild(span_tag)
   new_row4.appendChild(content);
   new_row2.appendChild(new_row3)
@@ -127,7 +143,7 @@ function appendMessage(message, sender) {
   board = document.getElementById('content_display_id')
   if (sender === 'Bot') {
     board = document.getElementById('content_display_id')
-    new_content = botMessage(message)
+    new_content = botMessage(message, 'bot')
     board.append(new_content)
   } else {
     board = document.getElementById('content_display_id')

@@ -170,6 +170,10 @@
   #chat .chat__conversation-board__message__bubble:active {
     background: var(--chat-bubble-active-background);
   }
+  #chat__conversation-board__message__bubble__2{
+   font-style: italic;
+   color: #8147fc;
+  }
   #chat .chat__conversation-panel {
     background: var(--chat-panel-background);
     border-radius: 12px;
