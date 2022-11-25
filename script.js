@@ -27,6 +27,10 @@ socket.on('handover_started', () => {
   allowOperator(accepted)
 })
 
+socket.on('display_history', (data) => {
+  handleHistory(data)
+});
+
 function confirmation() {
   return confirm('Operator Requested. Can you join in chat please?');
 }
@@ -39,6 +43,25 @@ function allowOperator(accepted) {
     appendMessage(message, 'Bot')
     socket.emit('event-2', message)
   };
+}
+
+function handleHistory(data) {
+  board = document.getElementById('content_display_id');
+  line1 = document.createElement('p');
+  content1 = document.createTextNode('Some previous conversation between user and bot');
+  line1.appendChild(content1)
+  line1.style.textAlign = 'center'
+  line1.style.color = 'white'
+  board.appendChild(line1)
+  Object.keys(data).map((key) => {
+    if (data[key].user === 'user') {
+      message = `${data[key].text} (${data[key].intent}) --> ${data[key].timestamp}`
+      appendMessage(message, 'user')
+    } else {
+      message = {text: data[key].text, quick_replies: data[key].buttons}
+      appendMessage(message, 'Bot')
+    }
+  })
 }
 
 // socket.on('user-connected', name => {
