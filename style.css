@@ -260,3 +260,15 @@
       display: none !important;
     }
   }
+
+  .chat__conversation-board__message__bubble_tab {
+    background-color: #484848;
+    max-width: 600px;
+    margin: 15px;
+    box-sizing: border-box;
+    padding: 1em;
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+    font-size: x-small;
+  }

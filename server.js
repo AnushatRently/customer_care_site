@@ -30,19 +30,20 @@ io.on('connection', socket => {
     console.log(`connect_error due to ${err.message}`);
   });
 
-  socket.on("event-1", message => {
-    socket.broadcast.emit('display_event-1', {message: message.message, name: message.user})
+  socket.on("event-1", (message, customerID) => {
+    socket.broadcast.emit('display_event-1', {message: message.message, name: message.user}, customerID)
+    console.log(`Emitted from UI ${customerID}`)
   });
 
-  socket.on("event-2", message => {
-    socket.broadcast.emit('display_event-2', message)
+  socket.on("event-2", (message, customerID) => {
+    socket.broadcast.emit('display_event-2', message, customerID)
   });
 
-  socket.on('triggered_handoff', () => {
-    socket.broadcast.emit('handover_started')
+  socket.on('triggered_handoff', (customerID, customerEmail, history) => {
+    socket.broadcast.emit('handover_started', customerID, customerEmail, history)
   });
 
-  socket.on('history', data => {
-    socket.broadcast.emit('display_history', data)
+  socket.on('cancelled_handoff', (customerID) => {
+    socket.broadcast.emit('cancelled_handoff', customerID)
   })
 })

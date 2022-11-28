@@ -1,57 +1,84 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Chat App</title>
-  <script defer src="http://localhost:5000/socket.io/socket.io.js"></script>
+  <title>Rently WebChat Application</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Lato'><link rel="stylesheet" href="./style.css">
+<script defer src="http://3.234.144.111:5000/socket.io/socket.io.js"></script>
   <script defer src="script.js"></script>
+
   <style>
-    body {
-      padding: 0;
-      margin: 0;
-      display: flex;
-      justify-content: center;
+      
+    [data-tab-info] {
+        display: none;
     }
-
-    #message-container {
-      width: 80%;
-      max-width: 1200px;
+      
+    .active[data-tab-info] {
+        display: block;
     }
-
-    #message-container div {
-      background-color: #CCC;
-      padding: 5px;
+      
+    .tab-content {
+        font-size: 30px;
+        font-family: sans-serif;
+        font-weight: bold;
+        color: rgb(82, 75, 75);
     }
-
-    #message-container div:nth-child(2n) {
-      background-color: #FFF;
+      
+    .tabs {
+        font-size: 20px;
+        color: rgb(255, 255, 255);
+        display: flex;
+        margin: 0;
     }
-
-    #send-container {
-      position: fixed;
-      padding-bottom: 30px;
-      bottom: 0;
-      background-color: white;
-      max-width: 1200px;
-      width: 80%;
-      display: flex;
-    }
-
-    #message-input {
-      flex-grow: 1;
-    }
-  </style>
+      
+    /* .tabs span {
+        background: rgb(28, 145, 38);
+        padding: 10px;
+        border: 1px solid rgb(255, 255, 255);
+    } */
+      
+    /* .tabs span:hover {
+        background: rgb(29, 185, 112);
+        cursor: pointer;
+        color: black;
+    } */
+</style>
 </head>
 <body>
-  <div id="message-container", style="overflow:auto;height: 500px; width:1000px">
-    <p style="text-align:center; display:block"><b>Customer Servive Operator</b></p>
-    <br><br>
+<h3 style="text-align: center;">Rently Customer Service Portal</h3>
+<div class="tabs" id="tab_id"></div>
+<div class="tab-content" id="tab_content_id"></div>
+<!-- <div class="--dark-theme" id="chat">
+  <div class="chat__conversation-board"  id="content_display_id">
   </div>
-  <form id="send-container">
-    <input type="text" id="message-input">
-    <button type="submit" id="send-button">Send</button>
-  </form>
+  <div class="chat__conversation-panel">
+    <div class="chat__conversation-panel__container">
+      <button class="chat__conversation-panel__button panel-item btn-icon add-file-button">
+        <svg class="feather feather-plus sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+      </button>
+      <button class="chat__conversation-panel__button panel-item btn-icon emoji-button">
+        <svg class="feather feather-smile sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+          <line x1="9" y1="9" x2="9.01" y2="9"></line>
+          <line x1="15" y1="9" x2="15.01" y2="9"></line>
+        </svg>
+      </button>
+      <input class="chat__conversation-panel__input panel-item" id="content_box_id" placeholder="Type a message..."/>
+      <button class="chat__conversation-panel__button panel-item btn-icon send-message-button" id="send_button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-reactid="1036">
+          <line x1="22" y1="2" x2="11" y2="13"></line>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+        </svg>
+        <img src="./arrow.png" width="24" height="24"/>
+      </button>
+    </div>
+  </div>
+</div> -->
+
 </body>
 </html>
