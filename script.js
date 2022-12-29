@@ -1,22 +1,6 @@
 const socket = io('http://3.234.144.111:5000/')
-// const messageContainer = document.getElementById('message-container')
-// const messageForm = document.getElementById('send-container')
-// const messageInput = document.getElementById('message-input')
-// const send_button=document.getElementById('send_button')
 
-// send_button.style.visibility = 'hidden';
-
-//const name = prompt('What is your name?')
-// appendMessage('You joined')
-// socket.emit('new-user', name)
-
-// socket.on('connect', () => {
-//   console.log(`connect:${socket.id}`);
-// });
-
-// socket.on('chat-message', data => {
-//   appendMessage(`${data.name}: ${data.message}`)
-// })
+var current_tab_id = ''
 
 socket.on('display_event-1', (data, customerID) => {
   appendMessage(data.message, data.name, customerID)
@@ -33,22 +17,21 @@ socket.on('handover_started', (customerID, customerEmail, history) => {
 })
 
 function createNewTab(customerID, customerEmail) {
+  if(current_tab_id == '') {
+    current_tab_id = `tab_${customerID}`
+  }
   tabElement = document.getElementById('tab_id');
   newTab = document.createElement('div');
   newTab.className = "chat__conversation-board__message__bubble_tab";
   newTab.setAttribute('id', `tab_${customerID}`)
+  newTab.setAttribute('unread_count', 0)
   span_tag = document.createElement("SPAN");
   span_tag.setAttribute('data-tab-value', customerID);
-  title = document.createTextNode(`${customerEmail}`);
+  title = document.createTextNode(`${customerEmail}   `);
   span_tag.appendChild(title)
   span_tag.style.fontSize = '15px'
-  newTab.appendChild(span_tag)
+  newTab.appendChild(span_tag)  
 
-  // tabElement = document.getElementById('tab_id');
-  // newTab = document.createElement('SPAN');
-  // newTab.setAttribute('data-tab-value', customerID);
-  // title = document.createTextNode(`User ${customerID}`);
-  // newTab.appendChild(title);
   tabElement.appendChild(newTab);
   
   createNewTabContent(customerID)
@@ -111,6 +94,12 @@ function createScreen(customerID) {
 function eventListinerForTab(customerID) {
   const tab = document.getElementById(`tab_${customerID}`)
   tab.addEventListener('click', () => {
+    current_tab_id = `tab_${customerID}`
+    tab.setAttribute('unread_count', 0) 
+    textNodeDOM = document.querySelector(`[data-tab-value="${customerID}"]`)
+    textNode = textNodeDOM.textContent
+    count = parseInt(tab.getAttribute('unread_count')) == 0 ? '   ' : `(${tab.getAttribute('unread_count')})`  
+    textNodeDOM.textContent = textNode.slice(0, textNode.length-3) + " " + count
     const tabInfos = document.querySelectorAll('[data-tab-info=""]')
     const tabInfo = document.getElementById(`customer_${customerID}`)
 
@@ -174,37 +163,6 @@ function handleHistory(data, customerID, customerEmail) {
   })
 }
 
-// socket.on('user-connected', name => {
-//   appendMessage(`${name} connected`)
-// })
-
-// socket.on('user-disconnected', name => {
-//   appendMessage(`${name} disconnected`)
-// })
-// const sendButton = document.getElementById('send_button')
-// sendButton.addEventListener('click', e => {
-//   e.preventDefault()
-//   board = document.getElementById('content_display_id')
-//   message = document.getElementById('content_box_id')
-//   content = botMessage({text: message.value}, 'agent')
-//   board.append(content)
-//   socket.emit('event-2', message.value)
-//   message.value = ''
-// })
-// messageForm.addEventListener('submit', e => {
-//   e.preventDefault()
-//   // const message = messageInput.value
-//   // appendMessage(`Agent: ${message}`)
-//   // socket.emit('event-2', message)
-//   console.log("Cool")
-//   // messageInput.value = ''
-// })
-
-// function appendMessage(message) {
-//   const messageElement = document.createElement('div')
-//   messageElement.innerText = message
-//   messageContainer.append(messageElement)
-// }
 
 function userMessage(message) {
   new_row = document.createElement('div');
@@ -273,6 +231,18 @@ function botMessage(message, from) {
 }
 
 function appendMessage(message, sender, customerID) {
+  tab = document.getElementById(`tab_${customerID}`)
+  if (current_tab_id != `tab_${customerID}`) {
+    tab.setAttribute('unread_count', parseInt(tab.getAttribute('unread_count')) + 1)
+    textNodeDOM = document.querySelector(`[data-tab-value="${customerID}"]`)
+    textNode = textNodeDOM.textContent
+    count = parseInt(tab.getAttribute('unread_count')) == 0 ? '   ' : `(${tab.getAttribute('unread_count')})`
+    textNodeDOM.textContent = textNode.slice(0, textNode.length-3) + " " + count
+
+    if (parseInt(tab.getAttribute('unread_count')) > 4) {
+      alert(`There are some messages from ${textNode.slice(0, textNode.length-3)}`)
+    }
+  }
   tab_content = document.getElementById(`customer_${customerID}`)
   board = tab_content.querySelector('#content_display_id')
   //board = document.getElementById('content_display_id')
